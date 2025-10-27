@@ -40,23 +40,27 @@ window.addEventListener('touchstart', enableAudioOnFirstInteraction, {passive:tr
 
 // audio control toggle
 
+const playBtn = document.getElementById("playBtn");
+const audio = document.getElementById("audio");
+
 playBtn.addEventListener("click", async () => {
   try {
-    // Ensure playback starts fresh
-    audio.currentTime = 0;
+    // Try playing immediately
     await audio.play();
     playBtn.textContent = "🎶 Playing...";
     playBtn.disabled = true;
   } catch (err) {
-    console.log("Playback blocked, waiting for another tap...");
+    // If blocked, prompt user to tap again
+    console.warn("Audio playback blocked:", err);
     playBtn.textContent = "Tap again to allow sound 🔁";
-    setTimeout(() => {
-      playBtn.textContent = "🎵 Play Chhath Geet";
-    }, 2500);
   }
 });
 
-audioControl.addEventListener('keydown', (e)=>{ if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); audioControl.click(); }});
+// Helpful: log if audio file fails to load
+audio.addEventListener("error", () => {
+  alert("⚠️ Audio file not found! Please check the filename or move the .mp3 next to index.html");
+});
+
 
 // highlight selection and show message in sun
 let lastSelected = null;
