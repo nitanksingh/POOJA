@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0b1530"/>
+<title>Chhathi Maiya Ke Kripa — Pasandida Stree (Mobile Final)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-top:#0b1530;
+    --horizon:#0f2b3a;
+    --sun-core1:#fff0c2;
+    --sun-core2:#ffd07a;
+    --sun-edge:#ff6a20;
+    --sunset-deep:#7a1406;
+    --marigold:#ffb347;
+    --card:#fff7e6;
+    --sun-msg-bg: rgba(255,243,208,0.98);
+    --sun-msg-color: #3a1600;
+    --control-bg: rgba(0,0,0,0.52);
+    --control-accent: #ffcf6b;
+    --tap-size: 64px;
+    --glow: 0 12px 30px rgba(255,170,60,0.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:Montserrat,system-ui,-apple-system; background:linear-gradient(180deg,var(--bg-top) 0%, #082035 40%, var(--horizon) 62%, #031218 100%);color:#fff;overflow-y:auto;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+  .wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px 12px 92px;text-align:center;position:relative}
+
+  /* horizon / water */
+  .horizon{position:absolute;left:0;right:0;bottom:26vh;height:22vh;pointer-events:none;z-index:4;background:linear-gradient(180deg, rgba(3,18,24,0) 0%, rgba(3,18,24,0.92) 100%);}
+  .water-reflection{position:absolute;left:0;right:0;bottom:0;height:28vh;background:linear-gradient(180deg, rgba(10,30,40,0.12), rgba(3,12,18,0.6));filter:blur(6px);z-index:2}
+
+  /* garland */
+  .garland-wrap{width:100%;max-width:1200px;margin:6px auto 0;pointer-events:none;z-index:60}
+  svg.marigold-garland{width:100%;height:110px;max-height:110px}
+  .garland-group{transform-origin:50% 0;animation:sway 6.2s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:translateY(0) rotate(-0.8deg)}50%{transform:translateY(2px) rotate(0.8deg)}}
+
+  /* sun area */
+  .sun-spot{position:relative;width:100%;max-width:920px;height:auto;margin-top:4.5vh;z-index:20;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+  .sun-glow{position:absolute;left:50%;transform:translateX(-50%);bottom:22vh;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 50% 40%, rgba(255,180,90,0.36), rgba(255,120,40,0.12) 35%, transparent 60%);filter:blur(42px);z-index:8}
+  .sun-core-wrap{position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center;z-index:12;transform:translateY(62px)}
+  .sun-core{
+    width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--sun-core1) 0%, var(--sun-core2) 36%, var(--sun-edge) 70%, var(--sunset-deep) 100%);
+    box-shadow:0 0 120px 40px rgba(255,120,50,0.16);
+    border:2px solid rgba(255,150,70,0.06);
+    display:flex;align-items:center;justify-content:center;padding:18px;
+    position:relative;overflow:visible;
+  }
+  .sun-rim{position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 40px rgba(255,120,40,0.06), 0 8px 30px rgba(0,0,0,0.25);pointer-events:none}
+
+  /* sun message (centered) */
+  .sun-msg{
+    display:block;
+    width:100%;
+    max-width:84%;
+    min-width:48%;
+    word-wrap:break-word;
+    white-space:normal;
+    text-align:center;
+    font-family:'Playfair Display',serif;
+    font-weight:800;
+    color:var(--sun-msg-color);
+    background:var(--sun-msg-bg);
+    padding:10px 14px;
+    border-radius:999px;
+    box-shadow:0 16px 40px rgba(0,0,0,0.34), inset 0 -6px 18px rgba(0,0,0,0.04);
+    opacity:0;
+    transform:translateY(6px) scale(0.98);
+    pointer-events:auto; /* allow close button clicks nearby */
+    z-index:22;
+    line-height:1.28;
+    transition:opacity .28s ease, transform .28s ease;
+    font-size: clamp(13px, 2.8vw, 18px);
+    overflow-wrap:break-word; word-break:break-word;
+    position:relative;
+  }
+  .sun-msg.show{opacity:1;transform:translateY(0) scale(1)}
+
+  /* close button inside sun */
+  .sun-close{
+    position:absolute; top:6px; right:8px; width:36px; height:36px; border-radius:9px;
+    background:rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.06); color:var(--sun-msg-color);
+    display:flex;align-items:center;justify-content:center; font-weight:700; cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,0.18); font-size:18px;
+  }
+  .sun-close:active{transform:scale(.96)}
+
+  /* card */
+  .card{max-width:860px;margin:8px auto 10px;padding:14px 18px;border-radius:12px;border:1px solid rgba(255,150,80,0.06);background:linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.03));z-index:6}
+  .card h1{margin:0;font-family:'Playfair Display',serif;font-size:clamp(16px,3.2vw,22px);font-weight:800;color:#ffd69b}
+  .card p{margin:8px 0 0;font-family:'Playfair Display',serif;color:#fff2df;font-size:clamp(13px,2.2vw,16px)}
+
+  /* diyas row: horizontal scroll on mobile */
+  .diyas{display:flex;gap:12px;justify-content:flex-start;margin-top:16px;z-index:30;padding:10px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+  .diyas::-webkit-scrollbar{display:none}
+  .diya{flex:0 0 auto;width:136px;height:72px;border-radius:999px 999px 40px 40px;background:linear-gradient(180deg,#7d3f16,#3e1706);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;box-shadow:0 18px 46px rgba(0,0,0,0.55);transition:transform .12s ease, box-shadow .18s ease;touch-action:manipulation}
+  .diya:hover{transform:translateY(-6px) scale(1.02)}
+  .diya:active{transform:translateY(-2px) scale(1.01)}
+  .diya:focus{outline:3px solid rgba(255,200,100,0.12);box-shadow:0 0 0 6px rgba(255,200,100,0.04)}
+  .diya .label{font-family:'Playfair Display',serif;font-weight:800;color:#2a1000;background:var(--card);padding:6px 10px;border-radius:999px;font-size:14px;box-shadow:inset 0 -5px 14px rgba(0,0,0,0.06)}
+  .diya .flame{position:absolute;top:-32px;width:38px;height:48px;border-radius:50% 50% 40% 40%;background:radial-gradient(circle at 45% 20%,#fff7d8 0%,#ffcf6b 45%,#ff9b25 80%);filter:drop-shadow(0 12px 30px rgba(255,120,30,0.12));animation:flicker 1.4s infinite}
+  @keyframes flicker{0%{transform:scaleY(1)}50%{transform:scaleY(1.04)}100%{transform:scaleY(0.98)}}
+
+  /* highlight for last clicked diya */
+  .diya.selected{box-shadow: var(--glow); transform:translateY(-6px) scale(1.02); }
+
+  .footer{margin-top:18px;color:rgba(255,255,255,0.75);font-size:13px;z-index:6}
+
+  /* audio control (bottom-right) */
+  .audio-control{
+    position:fixed; right:14px; bottom:14px; z-index:120; display:flex;align-items:center;justify-content:center;
+    width:var(--tap-size);height:var(--tap-size);border-radius:14px;background:var(--control-bg);backdrop-filter:blur(6px);cursor:pointer;
+    box-shadow:0 8px 30px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.04);
+  }
+  .audio-control:focus{outline:3px solid rgba(255,200,90,0.18)}
+  .audio-icon{width:28px;height:28px;display:block;fill:var(--control-accent)}
+  .audio-tooltip{position:fixed;right:calc(14px + var(--tap-size) + 10px);bottom:26px;padding:6px 10px;border-radius:8px;background:rgba(0,0,0,0.6);font-size:13px;color:#fff;opacity:0;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease;pointer-events:none}
+  .audio-control:hover + .audio-tooltip,.audio-control:focus + .audio-tooltip{opacity:1;transform:translateY(0)}
+
+  /* responsive tight */
+  @media (max-width:820px){
+    .sun-core{width:200px;height:200px}
+    .sun-core-wrap{transform:translateY(48px)}
+    .sun-glow{width:420px;height:420px}
+    .sun-msg{font-size:clamp(13px,3.8vw,16px);max-width:88%;min-width:56%}
+    .diya{width:128px;height:68px}
+    .audio-control{right:12px;bottom:12px; --tap-size:60px}
+  }
+  @media (max-width:460px){
+    .sun-core{width:170px;height:170px}
+    .sun-core-wrap{transform:translateY(42px)}
+    .sun-glow{width:360px;height:360px}
+    .sun-msg{font-size:13px;min-width:62%}
+    .diya{width:120px;height:64px}
+    .card{padding:12px 14px}
+    .audio-control{right:10px;bottom:10px; --tap-size:56px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="pageWrap">
+
+  <!-- decorative horizon & water -->
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="sun-spot" aria-hidden="true">
+    <div class="sun-glow" aria-hidden="true"></div>
+    <div class="sun-core-wrap">
+      <div class="sun-core" role="img" aria-label="Surya Devta at sunset">
+        <div class="sun-rim" aria-hidden="true"></div>
+
+        <!-- Sun message -->
+        <div id="sunMsg" class="sun-msg" aria-live="polite" role="status">
+          <!-- close button -->
+          <button id="sunClose" class="sun-close" aria-label="Close message" title="Close">×</button>
+          <!-- message text inserted via JS -->
+          <div id="sunText" style="padding-top:6px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sun-reflection" style="position:absolute; left:50%; transform:translateX(-50%); bottom:10vh; width:28%; height:10vh; border-radius:40px; background:linear-gradient(180deg, rgba(255,180,80,0.28), rgba(255,140,40,0.06)); filter:blur(8px); opacity:0.6; z-index:3;" aria-hidden="true"></div>
+  <div class="water-reflection" aria-hidden="true"></div>
+
+  <!-- decorative garland -->
+  <div class="garland-wrap" aria-hidden="true">
+    <svg class="marigold-garland" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+      <defs><radialGradient id="petal" cx="40%" cy="30%"><stop offset="0%" stop-color="#fff6bf"/><stop offset="45%" stop-color="#ffb347"/><stop offset="100%" stop-color="#ff7b00"/></radialGradient></defs>
+      <g class="garland-group"><g fill="url(#petal)" stroke="#b86f11" stroke-width="1">
+        <circle cx="36" cy="54" r="11"/><circle cx="84" cy="52" r="11"/><circle cx="132" cy="54" r="11"/>
+        <circle cx="180" cy="52" r="11"/><circle cx="228" cy="54" r="11"/><circle cx="276" cy="52" r="11"/>
+        <circle cx="324" cy="54" r="11"/><circle cx="372" cy="52" r="11"/><circle cx="420" cy="54" r="11"/>
+        <circle cx="468" cy="52" r="11"/><circle cx="516" cy="54" r="11"/><circle cx="564" cy="52" r="11"/>
+        <circle cx="612" cy="54" r="11"/><circle cx="660" cy="52" r="11"/><circle cx="708" cy="54" r="11"/>
+        <circle cx="756" cy="52" r="11"/><circle cx="804" cy="54" r="11"/><circle cx="852" cy="52" r="11"/>
+        <circle cx="900" cy="54" r="11"/><circle cx="948" cy="52" r="11"/><circle cx="996" cy="54" r="11"/>
+        <circle cx="1044" cy="52" r="11"/><circle cx="1092" cy="54" r="11"/>
+      </g></g>
+    </svg>
+  </div>
+
+  <!-- message card -->
+  <section class="card" role="region" aria-label="Tribute message">
+    <h1>“Suraj dhalat ba — sanjha ke lahar me bhakti ke ujiyara”</h1>
+    <p>Eh shaam ke arghya <strong>Pasandida Stree</strong> ke laagi, prem aur aasirbad ke sath.</p>
+  </section>
+
+  <!-- diyas (swipe row) -->
+  <div class="diyas" role="list" aria-label="Diyas (swipe left/right on mobile)">
+    <div class="diya" role="listitem" tabindex="0"
+         data-msg="Har arghya mein Pasandida Stree ke naam — Chhathi Maiya se hum prarthana karit bani ki unkar jeevan sada ujiyara hokh.">
+      <div class="flame" aria-hidden="true"></div><div class="label">Pasandida Stree</div>
+    </div>
+
+    <div class="diya" role="listitem" tabindex="0"
+         data-msg="Pasandida Stree, tohar muskaan suruj ke pahil kiran jaisan — har bhor naya aas aur umang le aave.">
+      <div class="flame" aria-hidden="true"></div><div class="label">Pasandida Stree</div>
+    </div>
+
+    <div class="diya" role="listitem" tabindex="0"
+         data-msg="Tohar pyaar kharna ke mithaas jaisan — pavittar, komal aur jindagi bhar meetha raho.">
+      <div class="flame" aria-hidden="true"></div><div class="label">Pasandida Stree</div>
+    </div>
+
+    <div class="diya" role="listitem" tabindex="0"
+         data-msg="Pasandida Stree ke saath hamar jindagi meharbani, dheeraj aur shanti se bharal raho — ii Chhathi Maiya se prarthana ba.">
+      <div class="flame" aria-hidden="true"></div><div class="label">Pasandida Stree</div>
+    </div>
+
+    <div class="diya" role="listitem" tabindex="0"
+         data-msg="Chhathi Maiya se prarthana — Pasandida Stree ke jeevan mein sada sukh, swasthya aur samriddhi banal raho.">
+      <div class="flame" aria-hidden="true"></div><div class="label">Pasandida Stree</div>
+    </div>
+  </div>
+
+  <div class="footer" aria-hidden="true">Chhath Puja • Prem aur Bhakti ke Saath</div>
+</div>
+
+<!-- uploaded song: keep file next to HTML -->
+<audio id="ambience" loop muted preload="auto">
+  <source src="chhathi-mayi-ke-karab-baratiya-bhojpuriplanetin_ou7zEFpA.mp3" type="audio/mpeg">
+</audio>
+
+<!-- audio control -->
+<button id="audioControl" class="audio-control" aria-label="Play music" title="Play / Pause (Space)">
+  <svg id="audioIcon" class="audio-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+</button>
+<div class="audio-tooltip" role="status" aria-live="polite">Play music</div>
+
+<script>
+  // touch optimizations
+  document.documentElement.style.touchAction = 'manipulation';
+
+  // elements
+  const ambience = document.getElementById('ambience');
+  const sunMsg = document.getElementById('sunMsg');
+  const sunText = document.getElementById('sunText');
+  const sunClose = document.getElementById('sunClose');
+  const audioControl = document.getElementById('audioControl');
+  const audioIcon = document.getElementById('audioIcon');
+  const audioTooltip = document.querySelector('.audio-tooltip');
+  const diyas = Array.from(document.querySelectorAll('.diya'));
+
+  // comfortable volume
+  ambience.volume = 0.62;
+
+  // utility: update play/pause icon
+  function updateIconState(isPlaying){
+    const svg = audioControl.querySelector('svg');
+    if(!svg) return;
+    svg.innerHTML = isPlaying ? '<path d="M6 5h4v14H6zM14 5h4v14h-4z"></path>' : '<path d="M8 5v14l11-7z"></path>';
+    audioControl.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+    audioControl.setAttribute('aria-label', isPlaying ? 'Pause music' : 'Play music');
+    audioTooltip.textContent = isPlaying ? 'Pause music' : 'Play music';
+  }
+
+  // enable audio on first user interaction (required by mobile browsers)
+  function enableAudioOnFirstInteraction(){
+    if(!ambience) return;
+    ambience.play().then(()=> {
+      ambience.muted = false;
+      updateIconState(true);
+    }).catch(()=> {
+      // playback blocked; user can use control
+    });
+    window.removeEventListener('pointerdown', enableAudioOnFirstInteraction);
+    window.removeEventListener('touchstart', enableAudioOnFirstInteraction);
+  }
+  window.addEventListener('pointerdown', enableAudioOnFirstInteraction, {passive:true});
+  window.addEventListener('touchstart', enableAudioOnFirstInteraction, {passive:true});
+
+  // audio control toggling
+  audioControl.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(ambience.paused){
+      ambience.play().then(()=> updateIconState(true)).catch(()=>{/*fallback*/});
+    } else {
+      ambience.pause();
+      updateIconState(false);
+    }
+  });
+  audioControl.addEventListener('keydown', (e)=>{ if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); audioControl.click(); }});
+
+  // show message in sun and keep until next diya or close
+  let lastSelected = null;
+  function selectDiya(el){
+    // remove previous highlight
+    if(lastSelected) lastSelected.classList.remove('selected');
+    // highlight new one
+    el.classList.add('selected');
+    lastSelected = el;
+  }
+  function showInSun(text, sourceDiya){
+    sunText.textContent = text;
+    sunMsg.classList.add('show');
+    // highlight source diya
+    if(sourceDiya) selectDiya(sourceDiya);
+    // small scroll for mobile so sun visible
+    if(window.innerWidth < 720){
+      const rect = document.querySelector('.sun-core').getBoundingClientRect();
+      const offset = Math.max(0, rect.top + window.scrollY - 80);
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  }
+
+  // close button
+  sunClose.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    sunMsg.classList.remove('show');
+  });
+
+  // attach interactions
+  diyas.forEach((d, idx)=>{
+    d.addEventListener('click', ()=> showInSun(d.dataset.msg, d));
+    d.addEventListener('touchstart', (e)=> { e.stopPropagation(); showInSun(d.dataset.msg, d); }, {passive:true});
+    d.addEventListener('keydown', (ev)=> { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); showInSun(d.dataset.msg, d); }});
+    // ARIA
+    d.setAttribute('aria-label', `Diya ${idx+1} — press to show blessing in sun`);
+  });
+
+  // ESC hides sun message
+  window.addEventListener('keydown', (e)=> { if(e.key === 'Escape') sunMsg.classList.remove('show'); });
+
+  // reflect audio play/pause state
+  ambience.addEventListener('play', ()=> updateIconState(true));
+  ambience.addEventListener('pause', ()=> updateIconState(false));
+
+  // initial UI states
+  updateIconState(false);
+
+  // optional: if user rotates, keep sun in view
+  window.addEventListener('orientationchange', () => {
+    setTimeout(()=> {
+      if(sunMsg.classList.contains('show')){
+        const rect = document.querySelector('.sun-core').getBoundingClientRect();
+        if(window.innerWidth < 720){
+          const offset = Math.max(0, rect.top + window.scrollY - 80);
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+      }
+    }, 350);
+  });
+</script>
+</body>
+</html>
