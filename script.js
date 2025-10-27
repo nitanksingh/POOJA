@@ -39,15 +39,23 @@ window.addEventListener('pointerdown', enableAudioOnFirstInteraction, {passive:t
 window.addEventListener('touchstart', enableAudioOnFirstInteraction, {passive:true});
 
 // audio control toggle
-audioControl.addEventListener('click', (e)=>{
-  e.stopPropagation();
-  if(ambience.paused){
-    ambience.play().then(()=> updateIconState(true)).catch(()=>{/*fallback*/});
-  } else {
-    ambience.pause();
-    updateIconState(false);
+
+playBtn.addEventListener("click", async () => {
+  try {
+    // Ensure playback starts fresh
+    audio.currentTime = 0;
+    await audio.play();
+    playBtn.textContent = "🎶 Playing...";
+    playBtn.disabled = true;
+  } catch (err) {
+    console.log("Playback blocked, waiting for another tap...");
+    playBtn.textContent = "Tap again to allow sound 🔁";
+    setTimeout(() => {
+      playBtn.textContent = "🎵 Play Chhath Geet";
+    }, 2500);
   }
 });
+
 audioControl.addEventListener('keydown', (e)=>{ if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); audioControl.click(); }});
 
 // highlight selection and show message in sun
